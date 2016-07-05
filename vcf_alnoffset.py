@@ -129,11 +129,10 @@ def map_pos_of_vars(var_list_in, seq_id, map_to_id, pos_map):
                 raise
 
         if s.POS == -1:
-            LOG.warn("No alignment match for this SNP. Skipping: %s",
-                     s.identifier())
+            LOG.warn("No alignment match for this SNP. Skipping: %s", s)
             continue
 
-        LOG.warn("Need to append to INFO")
+        #LOG.warn("Need to append to INFO")
         if map_to_id:
             s.INFO['offset'] = map_to_id
         else:
@@ -222,6 +221,10 @@ def main():
         pos_map.output()
     vcf_reader = vcf.VCFReader(filename=opts.vcf_in)
     var_list = [v for v in vcf_reader]
+    if not all([v.is_snp for v in var_list]):
+        LOG.warn("Found non-SNPs in vcf file (e.g. indels). Will ignore them")
+        var_list = [v for v in var_list if v.is_snp]
+           
     var_list_offset = map_pos_of_vars(
         var_list, opts.seq_id, opts.map_to_id, pos_map)
 
