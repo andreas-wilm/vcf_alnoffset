@@ -115,17 +115,17 @@ def map_pos_of_vars(var_list_in, seq_id, map_to_id, pos_map):
         try:
             LOG.debug("Changing pos from %d to %d for %s",
                       s.POS, conv_pos_map[s.POS], s)
-            s.INFO['orig-pos'] = s.POS+1
+            s.INFO['orig-pos'] = s.POS
             #import pdb; pdb.set_trace()
             s.POS = conv_pos_map[s.POS]
         except KeyError:
             if map_to_id:
                 LOG.warn("Position %d in %s has no equivalent in %s.",
-                         s.POS+1, seq_id, map_to_id)
+                         s.POS, seq_id, map_to_id)
                 continue
             else:
                 LOG.fatal("INTERNAL ERROR: Position %d in %s seems invalid.",
-                          s.POS+1, seq_id)
+                          s.POS, seq_id)
                 raise
 
         if s.POS == -1:
